@@ -1,5 +1,7 @@
 # @dokarpov/policy-kit v0.3
 
+[![test](https://github.com/dokarpov/policy-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/dokarpov/policy-kit/actions/workflows/ci.yml)
+
 **Executable policy primitives for agentic systems: who decides, what may run, and when automation must stop.**
 
 ```text
@@ -52,6 +54,20 @@ npm run report
 ```
 
 `npm run report` writes a machine-readable JSON report and a human-readable `docs/EVAL_REPORT.md`.
+
+## Evidence today
+
+| Evidence | Status |
+|---|---|
+| Decision-right routing | implemented |
+| Tool/action permission routing | implemented |
+| AUTO / ASK / BLOCK outcomes | implemented |
+| Core scenarios | **10/10 passing** |
+| Failure-class evals | **16/16 passing** |
+| Production authorization/IAM | **not claimed** |
+| Customer adoption / revenue impact | **not claimed** |
+
+The useful proof here is not the number of scenarios by itself. It is that ambiguity, execution risk, provenance loss, review bypass, money, privilege and destructive actions are represented as **explicit testable failure classes rather than prompt instructions**.
 
 ## Quick start
 
