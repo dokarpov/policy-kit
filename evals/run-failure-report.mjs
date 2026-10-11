@@ -85,7 +85,7 @@ for (const r of results) {
 
 const report = {
   title: 'Policy Kit Eval Report — Failure Classes',
-  version: '0.2.0',
+  version: '0.3.0',
   policyVersion: POLICY_VERSION,
   generatedAt: new Date().toISOString(),
   summary: {
@@ -110,7 +110,7 @@ writeFileSync(reportJsonPath, JSON.stringify(report, null, 2));
 const lines = [
   '# Eval Report — Failure Classes',
   '',
-  `**Policy kit:** v0.2.0 · **Policy version stamp:** ${POLICY_VERSION}`,
+  `**Policy kit:** v0.3.0 · **Policy version stamp:** ${POLICY_VERSION}`,
   `**Generated:** ${report.generatedAt}`,
   '',
   '## Summary',
