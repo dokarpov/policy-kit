@@ -5,7 +5,7 @@
 <title>Policy Kit v0.3</title>
 <style>
 :root{--bg:#f6f5f8;--ink:#14121a;--muted:#6b6574;--line:#e0dbe6;--card:#fff;--ok:#1a7f4b;--ask:#8a5a00;--block:#9b1c1c}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+*{box-sizing:border-box}html,body{max-width:100%;overflow-x:hidden}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
 .wrap{max-width:980px;margin:auto;padding:48px 20px 72px}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
 h1{font-size:clamp(36px,6vw,56px);letter-spacing:-.04em;line-height:1;margin:10px 0 12px}
@@ -17,8 +17,8 @@ label{display:block;font-weight:650;margin:12px 0 6px;font-size:13px}
 input[type=text],select{width:100%;min-width:0;max-width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
 .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
 .row label{font-weight:400;margin:0}
-.out{margin-top:16px;padding:16px;border-radius:14px;background:#14121a;color:#fff}
-.out .big{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.out{margin-top:16px;padding:16px;border-radius:14px;background:#14121a;color:#fff;min-width:0;overflow:hidden}
+.out .big{font-size:28px;font-weight:800;letter-spacing:-.03em}#summary{overflow-wrap:anywhere;word-break:break-word}
 .out pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font-size:12px;opacity:.85;margin:10px 0 0}
 .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#efeaf4;font-size:11px;margin:2px}
 .ok{color:var(--ok)}.ask{color:#f0c060}.block{color:#f08080}
