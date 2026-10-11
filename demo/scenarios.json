@@ -1,0 +1,92 @@
+[
+  {
+    "id": "crm-safe",
+    "title": "Safe CRM write",
+    "description": "Clear, low-consequence, reversible contact create → execute",
+    "input": {
+      "happened": "Lead validated, consent passed",
+      "next": "Create CRM contact",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "crm_create",
+      "allowed": true,
+      "blastRadius": "write_reversible"
+    }
+  },
+  {
+    "id": "identity-conflict",
+    "title": "Identity conflict",
+    "description": "Possible duplicate buyer → human before 1C",
+    "input": {
+      "happened": "Two records may describe the same buyer",
+      "next": "Merge and deliver to 1C",
+      "clear": false,
+      "consequential": true,
+      "reversible": false,
+      "actionId": "merge_to_1c",
+      "allowed": true,
+      "blastRadius": "write_irreversible"
+    }
+  },
+  {
+    "id": "money-ask",
+    "title": "Payment (money blast)",
+    "description": "Ops step looks clear; money tier forces ASK",
+    "input": {
+      "happened": "Invoice matched, payment prepared",
+      "next": "Execute payment",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "execute_payment",
+      "allowed": true,
+      "blastRadius": "money"
+    }
+  },
+  {
+    "id": "external-send",
+    "title": "Outbound email",
+    "description": "External blast → ASK even with template",
+    "input": {
+      "happened": "Outbound email drafted from approved template",
+      "next": "Send to prospect",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "send_outbound",
+      "allowed": true,
+      "blastRadius": "external"
+    }
+  },
+  {
+    "id": "tool-blocked",
+    "title": "Disallowed tool",
+    "description": "Tool not in allowlist → blocked",
+    "input": {
+      "happened": "Cleanup of draft suggested",
+      "next": "Hard-delete draft row",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "hard_delete",
+      "allowed": false,
+      "blastRadius": "write_reversible"
+    }
+  },
+  {
+    "id": "consent-gate",
+    "title": "Missing consent",
+    "description": "Intake without legal basis → human",
+    "input": {
+      "happened": "Intake received without consent or legal-basis field",
+      "next": "Create CRM lead",
+      "clear": false,
+      "consequential": true,
+      "reversible": false,
+      "actionId": "crm_lead_create",
+      "allowed": true,
+      "blastRadius": "write_irreversible"
+    }
+  }
+]

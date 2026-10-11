@@ -1,0 +1,46 @@
+{
+  "name": "@dokarpov/policy-kit",
+  "version": "0.3.0",
+  "description": "Control plane for agentic systems with one-click demo server. Decision rights \u2192 tool permissions \u2192 audit.",
+  "author": "Daria Karpova <dokarpov>",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./decide": "./src/decide.js",
+    "./approve": "./src/approve.js",
+    "./bridge": "./src/bridge.js"
+  },
+  "scripts": {
+    "test": "node evals/run.mjs && node evals/run-failure-report.mjs",
+    "test:core": "node evals/run.mjs",
+    "test:failures": "node evals/run-failure-report.mjs",
+    "report": "node evals/run-failure-report.mjs",
+    "demo": "node demo/server.mjs",
+    "start": "node demo/server.mjs"
+  },
+  "keywords": [
+    "agentic",
+    "policy",
+    "human-in-the-loop",
+    "decision-systems",
+    "approval",
+    "blast-radius",
+    "ai-agents",
+    "control-plane"
+  ],
+  "files": [
+    "src/",
+    "evals/",
+    "docs/",
+    "examples/",
+    "index.html",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  }
+}

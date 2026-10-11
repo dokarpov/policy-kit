@@ -1,0 +1,129 @@
+[
+  {
+    "id": "faq-auto",
+    "layer": "pipeline",
+    "input": {
+      "happened": "Customer asked a known FAQ",
+      "next": "Send standard answer",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "send_faq",
+      "blastRadius": "write_reversible"
+    },
+    "expected": { "outcome": "execute", "decider": "system", "route": "AUTO" }
+  },
+  {
+    "id": "identity-human",
+    "layer": "pipeline",
+    "input": {
+      "happened": "Two records may be the same buyer",
+      "next": "Resolve identity before CRM write",
+      "clear": false,
+      "consequential": true,
+      "reversible": false,
+      "actionId": "crm_merge"
+    },
+    "expected": { "outcome": "human", "decider": "person" }
+  },
+  {
+    "id": "external-via-blast",
+    "layer": "pipeline",
+    "note": "Workflow treats step as clear/low-consequence; tool policy forces ASK via blast=external",
+    "input": {
+      "happened": "Agent drafted outbound to named account",
+      "next": "Send externally",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "send_external",
+      "blastRadius": "external"
+    },
+    "expected": { "outcome": "human", "decider": "system", "route": "ASK" }
+  },
+  {
+    "id": "money-via-blast",
+    "layer": "pipeline",
+    "note": "System may propose; money blast forces ASK at tool layer",
+    "input": {
+      "happened": "Invoice matched, payment prepared",
+      "next": "Execute payment",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "execute_payment",
+      "blastRadius": "money"
+    },
+    "expected": { "outcome": "human", "decider": "system", "route": "ASK" }
+  },
+  {
+    "id": "consequential-stops-at-decide",
+    "layer": "pipeline",
+    "note": "High consequence never reaches tool policy",
+    "input": {
+      "happened": "Access request validated",
+      "next": "Grant admin role",
+      "clear": true,
+      "consequential": true,
+      "reversible": false,
+      "actionId": "grant_admin",
+      "blastRadius": "privilege"
+    },
+    "expected": { "outcome": "human", "decider": "person" }
+  },
+  {
+    "id": "tool-blocked",
+    "layer": "pipeline",
+    "note": "System path + tool not allowed → blocked",
+    "input": {
+      "happened": "Cleanup suggested",
+      "next": "Archive soft-deleted row",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "delete_record",
+      "allowed": false,
+      "blastRadius": "write_reversible"
+    },
+    "expected": { "outcome": "blocked", "decider": "system", "route": "BLOCK" }
+  },
+  {
+    "id": "crm-write-execute",
+    "layer": "pipeline",
+    "input": {
+      "happened": "Lead validated, consent passed",
+      "next": "Create CRM contact",
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "actionId": "crm_create",
+      "blastRadius": "write_reversible"
+    },
+    "expected": { "outcome": "execute", "route": "AUTO" }
+  },
+  {
+    "id": "decide-only-ambiguous",
+    "layer": "decide",
+    "input": { "clear": false, "consequential": false },
+    "expected": { "decider": "person", "reason": "ambiguous" }
+  },
+  {
+    "id": "decide-irreversible",
+    "layer": "decide",
+    "input": { "clear": true, "consequential": false, "reversible": false },
+    "expected": { "decider": "person", "reason": "hard_to_reverse" }
+  },
+  {
+    "id": "approve-read-auto",
+    "layer": "approve",
+    "input": {
+      "id": "fetch_crm",
+      "allowed": true,
+      "clear": true,
+      "consequential": false,
+      "reversible": true,
+      "blastRadius": "read"
+    },
+    "expected": { "route": "AUTO" }
+  }
+]

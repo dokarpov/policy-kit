@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Policy Kit Demo</title>
+<style>
+:root{--bg:#f5f4f8;--ink:#13111a;--muted:#6a6474;--line:#ddd7e4;--card:#fff;--ok:#0d7a45;--ask:#9a6b00;--block:#a11}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:36px 18px 64px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+h1{font-size:clamp(32px,5vw,48px);letter-spacing:-.04em;line-height:1.05;margin:8px 0 8px}
+.lede{color:var(--muted);max-width:560px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 8px;align-items:center}
+.bar button,.scen{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;cursor:pointer;font:inherit}
+.scen:hover,.scen.active{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+label{display:block;font-weight:650;margin:10px 0 4px;font-size:13px}
+input[type=text],select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.row{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px}
+.row label{font-weight:400;margin:0}
+.out{padding:14px;border-radius:12px;background:#13111a;color:#fff;min-height:120px}
+.out .big{font-size:26px;font-weight:800}
+.ok{color:#5ddea0}.ask{color:#f0c060}.block{color:#f09090}
+pre{white-space:pre-wrap;font-size:12px;opacity:.88;margin:8px 0 0}
+.status{font-size:12px;color:var(--muted)}
+.err{color:#a11;font-size:13px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="eyebrow">@dokarpov/policy-kit · Demo server</div>
+  <h1>Decide → Approve → Outcome</h1>
+  <p class="lede">One-click local demo. Preset scenarios or free-form signal. Talks to <code>/api/pipeline</code>.</p>
+  <p class="status" id="health">Connecting…</p>
+
+  <div class="bar" id="scenarios"></div>
+
+  <div class="grid">
+    <section class="card">
+      <div class="eyebrow">Signal</div>
+      <label>What happened?</label>
+      <input type="text" id="happened" value="Lead validated, consent passed">
+      <label>What next?</label>
+      <input type="text" id="next" value="Create CRM contact">
+      <label>Action id</label>
+      <input type="text" id="actionId" value="crm_create">
+      <label>Blast radius</label>
+      <select id="blast">
+        <option value="write_reversible">write_reversible</option>
+        <option value="read">read</option>
+        <option value="write_irreversible">write_irreversible</option>
+        <option value="external">external</option>
+        <option value="privilege">privilege</option>
+        <option value="money">money</option>
+      </select>
+      <div class="row">
+        <label><input type="checkbox" id="clear" checked> clear</label>
+        <label><input type="checkbox" id="consequential"> consequential</label>
+        <label><input type="checkbox" id="reversible" checked> reversible</label>
+        <label><input type="checkbox" id="allowed" checked> allowed</label>
+      </div>
+      <div class="bar">
+        <button type="button" id="run">Run pipeline</button>
+      </div>
+      <p class="err" id="err"></p>
+    </section>
+    <section class="card">
+      <div class="eyebrow">Result</div>
+      <div class="out">
+        <div class="big" id="outcome">—</div>
+        <div id="summary"></div>
+        <pre id="json"></pre>
+      </div>
+    </section>
+  </div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+
+async function health() {
+  try {
+    const r = await fetch('/api/health');
+    const j = await r.json();
+    $('health').textContent = `Server ok · kit ${j.kit} · policy ${j.policyVersion}`;
+  } catch {
+    $('health').textContent = 'Server not reachable — start with: npm run demo';
+  }
+}
+
+async function loadScenarios() {
+  const r = await fetch('/api/scenarios');
+  const { scenarios } = await r.json();
+  const box = $('scenarios');
+  scenarios.forEach((s, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'scen';
+    b.textContent = s.title;
+    b.title = s.description;
+    b.onclick = () => {
+      [...box.children].forEach(x => x.classList.remove('active'));
+      b.classList.add('active');
+      apply(s.input);
+      run();
+    };
+    box.appendChild(b);
+    if (i === 0) {
+      b.classList.add('active');
+      apply(s.input);
+    }
+  });
+}
+
+function apply(input) {
+  $('happened').value = input.happened || '';
+  $('next').value = input.next || '';
+  $('actionId').value = input.actionId || '';
+  $('blast').value = input.blastRadius || 'write_reversible';
+  $('clear').checked = !!input.clear;
+  $('consequential').checked = !!input.consequential;
+  $('reversible').checked = input.reversible !== false;
+  $('allowed').checked = input.allowed !== false;
+}
+
+async function run() {
+  $('err').textContent = '';
+  const body = {
+    happened: $('happened').value,
+    next: $('next').value,
+    actionId: $('actionId').value,
+    blastRadius: $('blast').value,
+    clear: $('clear').checked,
+    consequential: $('consequential').checked,
+    reversible: $('reversible').checked,
+    allowed: $('allowed').checked
+  };
+  try {
+    const r = await fetch('/api/pipeline', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || r.statusText);
+    const el = $('outcome');
+    el.textContent = (j.outcome || '—').toUpperCase();
+    el.className = 'big ' + (j.outcome === 'execute' ? 'ok' : j.outcome === 'blocked' ? 'block' : 'ask');
+    $('summary').textContent = [
+      j.decision ? `decider: ${j.decision.decider} (${j.decision.reason})` : '',
+      j.approval ? `route: ${j.approval.route} (${j.approval.reason})` : 'route: —'
+    ].filter(Boolean).join(' · ');
+    $('json').textContent = JSON.stringify(j, null, 2);
+  } catch (e) {
+    $('err').textContent = e.message;
+  }
+}
+
+$('run').onclick = run;
+health().then(loadScenarios).then(run);
+</script>
+</body>
+</html>

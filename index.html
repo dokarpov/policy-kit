@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Policy Kit v0.1</title>
+<style>
+:root{--bg:#f6f5f8;--ink:#14121a;--muted:#6b6574;--line:#e0dbe6;--card:#fff;--ok:#1a7f4b;--ask:#8a5a00;--block:#9b1c1c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,sans-serif}
+.wrap{max-width:980px;margin:auto;padding:48px 20px 72px}
+.eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+h1{font-size:clamp(36px,6vw,56px);letter-spacing:-.04em;line-height:1;margin:10px 0 12px}
+.lede{color:var(--muted);font-size:18px;max-width:640px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+label{display:block;font-weight:650;margin:12px 0 6px;font-size:13px}
+input[type=text],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+.row label{font-weight:400;margin:0}
+.out{margin-top:16px;padding:16px;border-radius:14px;background:#14121a;color:#fff}
+.out .big{font-size:28px;font-weight:800;letter-spacing:-.03em}
+.out pre{white-space:pre-wrap;font-size:12px;opacity:.85;margin:10px 0 0}
+.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#efeaf4;font-size:11px;margin:2px}
+.ok{color:var(--ok)}.ask{color:#f0c060}.block{color:#f08080}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="eyebrow">@dokarpov/policy-kit v0.1 · Batch 1</div>
+  <h1>Decide. Approve.<br>Then act.</h1>
+  <p class="lede">Signal → who decides → may the tool run → execute / human / blocked. Open this file locally; no build step.</p>
+
+  <div class="grid">
+    <section class="card">
+      <div class="eyebrow">Signal</div>
+      <label>What happened?</label>
+      <input type="text" id="happened" value="Lead validated, consent passed">
+      <label>What next?</label>
+      <input type="text" id="next" value="Create CRM contact">
+      <label>Action id</label>
+      <input type="text" id="actionId" value="crm_create">
+      <label>Blast radius</label>
+      <select id="blast">
+        <option value="write_reversible">write_reversible</option>
+        <option value="read">read</option>
+        <option value="write_irreversible">write_irreversible</option>
+        <option value="external">external</option>
+        <option value="privilege">privilege</option>
+        <option value="money">money</option>
+      </select>
+      <div class="row">
+        <label><input type="checkbox" id="clear" checked> clear</label>
+        <label><input type="checkbox" id="consequential"> consequential</label>
+        <label><input type="checkbox" id="reversible" checked> reversible</label>
+        <label><input type="checkbox" id="allowed" checked> allowed</label>
+      </div>
+    </section>
+    <section class="card">
+      <div class="eyebrow">Pipeline result</div>
+      <div class="out">
+        <div class="big" id="outcome">—</div>
+        <div id="summary"></div>
+        <pre id="json"></pre>
+      </div>
+    </section>
+  </div>
+</main>
+<script type="module">
+import { pipeline } from './src/index.js';
+
+function run() {
+  const r = pipeline({
+    happened: happened.value,
+    next: next.value,
+    clear: clear.checked,
+    consequential: consequential.checked,
+    reversible: reversible.checked,
+    actionId: actionId.value,
+    allowed: allowed.checked,
+    blastRadius: blast.value
+  });
+  const el = document.getElementById('outcome');
+  el.textContent = r.outcome.toUpperCase();
+  el.className = 'big ' + (r.outcome === 'execute' ? 'ok' : r.outcome === 'blocked' ? 'block' : 'ask');
+  summary.textContent = [
+    `decider: ${r.decision.decider} (${r.decision.reason})`,
+    r.approval ? `route: ${r.approval.route} (${r.approval.reason})` : 'route: —'
+  ].join(' · ');
+  json.textContent = JSON.stringify(r, null, 2);
+}
+document.querySelectorAll('input,select').forEach(el => el.addEventListener('change', run));
+document.querySelectorAll('input[type=text]').forEach(el => el.addEventListener('input', run));
+run();
+</script>
+</body>
+</html>
