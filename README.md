@@ -64,6 +64,7 @@ npm run report
 | AUTO / ASK / BLOCK outcomes | implemented |
 | Core scenarios | **10/10 passing** |
 | Failure-class evals | **16/16 passing** |
+| Responsive Chromium smoke (320 / 390 / 768 / 1440 px) | **passing in CI** |
 | Production authorization/IAM | **not claimed** |
 | Customer adoption / revenue impact | **not claimed** |
 
