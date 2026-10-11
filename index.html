@@ -10,16 +10,16 @@
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
 h1{font-size:clamp(36px,6vw,56px);letter-spacing:-.04em;line-height:1;margin:10px 0 12px}
 .lede{color:var(--muted);font-size:18px;max-width:640px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:28px}
-@media(max-width:720px){.grid{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:28px;min-width:0}
+@media(max-width:720px){.grid{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;min-width:0}
 label{display:block;font-weight:650;margin:12px 0 6px;font-size:13px}
-input[type=text],select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
+input[type=text],select{width:100%;min-width:0;max-width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font:inherit}
 .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
 .row label{font-weight:400;margin:0}
 .out{margin-top:16px;padding:16px;border-radius:14px;background:#14121a;color:#fff}
 .out .big{font-size:28px;font-weight:800;letter-spacing:-.03em}
-.out pre{white-space:pre-wrap;font-size:12px;opacity:.85;margin:10px 0 0}
+.out pre{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word;font-size:12px;opacity:.85;margin:10px 0 0}
 .pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#efeaf4;font-size:11px;margin:2px}
 .ok{color:var(--ok)}.ask{color:#f0c060}.block{color:#f08080}
 </style>
