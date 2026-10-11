@@ -1,6 +1,6 @@
 # Eval Report — Failure Classes
 
-**Policy kit:** v0.2.0 · **Policy version stamp:** 0.3.0
+**Policy kit:** v0.3.0 · **Policy version stamp:** 0.3.0
 **Generated:** 2026-10-11T12:00:01.557Z
 
 ## Summary
