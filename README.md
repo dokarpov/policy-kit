@@ -65,8 +65,6 @@ npm run report
 | Core scenarios | **10/10 passing** |
 | Failure-class evals | **16/16 passing** |
 | Responsive Chromium smoke (320 / 390 / 768 / 1440 px) | **passing in CI** |
-| Production authorization/IAM | **not claimed** |
-| Customer adoption / revenue impact | **not claimed** |
 
 The useful proof here is not the number of scenarios by itself. It is that ambiguity, execution risk, provenance loss, review bypass, money, privilege and destructive actions are represented as **explicit testable failure classes rather than prompt instructions**.
 
@@ -114,9 +112,9 @@ decision-systems     policy-kit
 who decides?    →    may the tool run?
 ```
 
-## Status boundary
+## Integration scope
 
-This is an executable reference policy and eval harness. It is not production authorization, IAM, transaction approval infrastructure or compliance certification. Real deployments still need authenticated principals, policy ownership/versioning, durable audit, provider-specific tool controls and operational review design.
+Executable policy reference and evaluation harness. Production integrations add authenticated principals, organization-owned policies, durable audit and provider-specific enforcement. Independent adoption and commercial outcomes are not yet measured.
 
 ---
 
