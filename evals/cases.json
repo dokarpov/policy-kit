@@ -9,9 +9,14 @@
       "consequential": false,
       "reversible": true,
       "actionId": "send_faq",
-      "blastRadius": "write_reversible"
+      "blastRadius": "write_reversible",
+      "allowed": true
     },
-    "expected": { "outcome": "execute", "decider": "system", "route": "AUTO" }
+    "expected": {
+      "outcome": "execute",
+      "decider": "system",
+      "route": "AUTO"
+    }
   },
   {
     "id": "identity-human",
@@ -24,7 +29,10 @@
       "reversible": false,
       "actionId": "crm_merge"
     },
-    "expected": { "outcome": "human", "decider": "person" }
+    "expected": {
+      "outcome": "human",
+      "decider": "person"
+    }
   },
   {
     "id": "external-via-blast",
@@ -37,9 +45,14 @@
       "consequential": false,
       "reversible": true,
       "actionId": "send_external",
-      "blastRadius": "external"
+      "blastRadius": "external",
+      "allowed": true
     },
-    "expected": { "outcome": "human", "decider": "system", "route": "ASK" }
+    "expected": {
+      "outcome": "human",
+      "decider": "system",
+      "route": "ASK"
+    }
   },
   {
     "id": "money-via-blast",
@@ -52,9 +65,14 @@
       "consequential": false,
       "reversible": true,
       "actionId": "execute_payment",
-      "blastRadius": "money"
+      "blastRadius": "money",
+      "allowed": true
     },
-    "expected": { "outcome": "human", "decider": "system", "route": "ASK" }
+    "expected": {
+      "outcome": "human",
+      "decider": "system",
+      "route": "ASK"
+    }
   },
   {
     "id": "consequential-stops-at-decide",
@@ -69,7 +87,10 @@
       "actionId": "grant_admin",
       "blastRadius": "privilege"
     },
-    "expected": { "outcome": "human", "decider": "person" }
+    "expected": {
+      "outcome": "human",
+      "decider": "person"
+    }
   },
   {
     "id": "tool-blocked",
@@ -85,7 +106,11 @@
       "allowed": false,
       "blastRadius": "write_reversible"
     },
-    "expected": { "outcome": "blocked", "decider": "system", "route": "BLOCK" }
+    "expected": {
+      "outcome": "blocked",
+      "decider": "system",
+      "route": "BLOCK"
+    }
   },
   {
     "id": "crm-write-execute",
@@ -97,21 +122,39 @@
       "consequential": false,
       "reversible": true,
       "actionId": "crm_create",
-      "blastRadius": "write_reversible"
+      "blastRadius": "write_reversible",
+      "allowed": true
     },
-    "expected": { "outcome": "execute", "route": "AUTO" }
+    "expected": {
+      "outcome": "execute",
+      "route": "AUTO"
+    }
   },
   {
     "id": "decide-only-ambiguous",
     "layer": "decide",
-    "input": { "clear": false, "consequential": false },
-    "expected": { "decider": "person", "reason": "ambiguous" }
+    "input": {
+      "clear": false,
+      "consequential": false,
+      "reversible": true
+    },
+    "expected": {
+      "decider": "person",
+      "reason": "ambiguous"
+    }
   },
   {
     "id": "decide-irreversible",
     "layer": "decide",
-    "input": { "clear": true, "consequential": false, "reversible": false },
-    "expected": { "decider": "person", "reason": "hard_to_reverse" }
+    "input": {
+      "clear": true,
+      "consequential": false,
+      "reversible": false
+    },
+    "expected": {
+      "decider": "person",
+      "reason": "hard_to_reverse"
+    }
   },
   {
     "id": "approve-read-auto",
@@ -124,6 +167,8 @@
       "reversible": true,
       "blastRadius": "read"
     },
-    "expected": { "route": "AUTO" }
+    "expected": {
+      "route": "AUTO"
+    }
   }
 ]
