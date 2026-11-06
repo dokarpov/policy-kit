@@ -1,7 +1,7 @@
 {
   "name": "@dokarpov/policy-kit",
   "version": "0.3.0",
-  "description": "Control plane for agentic systems with one-click demo server. Decision rights \u2192 tool permissions \u2192 audit.",
+  "description": "Control plane for agentic systems with one-click demo server. Decision rights → tool permissions → audit.",
   "author": "Daria Karpova <dokarpov>",
   "license": "MIT",
   "type": "module",
@@ -13,7 +13,7 @@
     "./bridge": "./src/bridge.js"
   },
   "scripts": {
-    "test": "node evals/run.mjs && node evals/run-failure-report.mjs",
+    "test": "node --test tests/policy-hardening.test.mjs && node evals/run.mjs && node evals/run-failure-report.mjs",
     "test:core": "node evals/run.mjs",
     "test:failures": "node evals/run-failure-report.mjs",
     "report": "node evals/run-failure-report.mjs",

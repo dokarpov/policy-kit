@@ -24,6 +24,7 @@ console.log(
     consequential: false,
     reversible: true,
     actionId: 'crm_create',
+    allowed: true, // explicitly granted by the integrating policy
     blastRadius: 'write_reversible'
   })
 );

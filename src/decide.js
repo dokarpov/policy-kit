@@ -28,6 +28,10 @@ export function decide(input) {
   if (reversible === false) {
     return { decider: 'person', reason: 'hard_to_reverse', traits };
   }
+  // Unknown reversibility is not evidence that an action may be automated.
+  if (reversible === undefined) {
+    return { decider: 'person', reason: 'reversibility_unverified', traits };
+  }
   if (clear && !consequential) {
     return { decider: 'system', reason: 'clear_low_consequence', traits };
   }

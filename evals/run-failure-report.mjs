@@ -12,6 +12,11 @@ const cases = JSON.parse(
   readFileSync(join(__dirname, 'failure-cases.json'), 'utf8')
 );
 
+const approvalFixtures = JSON.parse(readFileSync(join(__dirname, 'authorization-fixtures.json'), 'utf8'));
+const authorizedCaseIds = new Set(approvalFixtures.authorizedCaseIds);
+const unknownApprovals = [...authorizedCaseIds].filter(id => !cases.some(c => c.id === id));
+if (unknownApprovals.length) throw new Error('Unrecognized authorization fixture cases: ' + unknownApprovals.join(', '));
+
 const results = [];
 let passed = 0;
 let failed = 0;
@@ -21,13 +26,16 @@ for (const c of cases) {
   let actual = {};
 
   try {
+    // A separate, explicit test policy grants known synthetic actions.
+    // Missing permission remains forbidden; never derive grants from expected results.
+    const input = authorizedCaseIds.has(c.id) ? { ...c.input, allowed: true } : c.input;
     if (c.layer === 'decide') {
-      const r = decide(c.input);
+      const r = decide(input);
       actual = { decider: r.decider, reason: r.reason };
       if (c.expected.decider && r.decider !== c.expected.decider) ok = false;
       if (c.expected.reason && r.reason !== c.expected.reason) ok = false;
     } else if (c.layer === 'approve') {
-      const r = routeAction(c.input);
+      const r = routeAction(input);
       actual = {
         route: r.route,
         reason: r.reason,
@@ -36,7 +44,7 @@ for (const c of cases) {
       if (c.expected.route && r.route !== c.expected.route) ok = false;
       if (c.expected.policyVersionPresent && !r.policyVersion) ok = false;
     } else {
-      const r = pipeline(c.input);
+      const r = pipeline(input);
       actual = {
         outcome: r.outcome,
         decider: r.decision.decider,

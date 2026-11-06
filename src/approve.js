@@ -39,7 +39,9 @@ export function routeAction(action) {
   if (!action || typeof action !== 'object') {
     throw new TypeError('action is required');
   }
-  if (action.allowed === false) {
+  // The integrating policy must explicitly grant execution. Omitted or
+  // truthy-but-not-boolean permission is never an authorization grant.
+  if (action.allowed !== true) {
     return { route: 'BLOCK', reason: 'tool_not_allowed', policyVersion: POLICY_VERSION };
   }
 
@@ -56,6 +58,10 @@ export function routeAction(action) {
       reason: 'blast_write_irreversible',
       policyVersion: POLICY_VERSION
     };
+  }
+
+  if (!BLAST_TIERS.includes(action.blastRadius)) {
+    return { route: 'ASK', reason: 'blast_radius_unverified', policyVersion: POLICY_VERSION };
   }
 
   if (
