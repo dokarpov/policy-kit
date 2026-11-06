@@ -1,0 +1,9 @@
+{
+  "purpose": "Explicit synthetic authorization grants for test cases, not executable production policy",
+  "authorizedCaseIds": [
+    "fc06-bad-auto-money",
+    "fc06b-bad-auto-external",
+    "fc07-rubber-stamp-safe-path",
+    "fc11-idempotent-retry-ok"
+  ]
+}
