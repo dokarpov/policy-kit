@@ -80,11 +80,14 @@ const result = pipeline({
   consequential: false,
   reversible: true,
   actionId: 'crm_create',
+  allowed: true, // explicit policy grant; omitted means BLOCK
   blastRadius: 'write_reversible'
 });
 
 // result.outcome: 'execute' | 'human' | 'blocked'
 ```
+
+**Fail-closed contract (hardening PR):** `allowed` defaults to `false`; only an explicit boolean `allowed: true` from a trusted integrating policy permits execution. Missing reversibility is routed to human review, and unknown blast-radius values cannot auto-execute. This intentionally changes older permissive defaults and requires a consumer migration review before release.
 
 ## Try the demo
 
