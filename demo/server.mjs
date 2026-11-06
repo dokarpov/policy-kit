@@ -121,9 +121,9 @@ const server = createServer(async (req, res) => {
         next: body.next,
         clear: bool(body.clear),
         consequential: bool(body.consequential),
-        reversible: body.reversible === undefined ? true : bool(body.reversible),
+        reversible: body.reversible === true ? true : body.reversible === false ? false : undefined,
         actionId: body.actionId || 'demo_action',
-        allowed: body.allowed === undefined ? true : bool(body.allowed),
+        allowed: body.allowed === true,
         blastRadius: body.blastRadius || undefined,
         label: body.label,
         kind: body.kind || 'demo'
@@ -148,7 +148,7 @@ const server = createServer(async (req, res) => {
         200,
         routeAction({
           id: body.id || 'demo',
-          allowed: body.allowed === undefined ? true : bool(body.allowed),
+          allowed: body.allowed === true,
           clear: bool(body.clear),
           consequential: bool(body.consequential),
           reversible: bool(body.reversible),
