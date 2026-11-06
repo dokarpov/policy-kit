@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — fail-closed permission contract (breaking)
+- Authorization must be explicitly `allowed: true`, not merely present or truthy.
+- Unknown reversibility now requires a person; missing/unknown blast-radius cannot execute automatically.
+- Decision bridge validates the result against its traits to prevent forged permission escalation.
+- Synthetic eval authorization is recorded independently of expected routing outcomes.
+- Review integration migrations and regression results before shipping.
+
+
 ## v0.3.0 — 2026-10-09 · Batch 3
 
 ### Demo
