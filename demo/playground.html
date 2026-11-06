@@ -121,7 +121,7 @@ function apply(input) {
   $('clear').checked = !!input.clear;
   $('consequential').checked = !!input.consequential;
   $('reversible').checked = input.reversible !== false;
-  $('allowed').checked = input.allowed !== false;
+  $('allowed').checked = input.allowed === true;
 }
 
 async function run() {
