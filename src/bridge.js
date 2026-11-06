@@ -10,15 +10,24 @@ import { routeAction, auditEvent } from './approve.js';
  * Map decide() result → action traits for routeAction().
  */
 export function toActionTraits(decisionResult, meta = {}) {
-  if (!decisionResult || !decisionResult.traits) {
-    throw new TypeError('decisionResult with traits is required');
+  if (!decisionResult || !decisionResult.traits || !['system', 'person'].includes(decisionResult.decider)) {
+    throw new TypeError('decisionResult with valid decider and traits is required');
   }
   const t = decisionResult.traits;
+  if (typeof t.clear !== 'boolean' || typeof t.consequential !== 'boolean' ||
+      !(t.reversible === null || typeof t.reversible === 'boolean')) {
+    throw new TypeError('invalid decision traits');
+  }
+  const verified = decide({ clear: t.clear, consequential: t.consequential,
+    ...(t.reversible === null ? {} : { reversible: t.reversible }) });
+  if (verified.decider !== decisionResult.decider || verified.reason !== decisionResult.reason) {
+    throw new TypeError('decisionResult conflicts with its supplied traits');
+  }
   return {
     id: meta.id || 'workflow_step',
     label: meta.label,
     kind: meta.kind || 'workflow',
-    allowed: meta.allowed !== false,
+    allowed: meta.allowed === true && decisionResult.decider === 'system',
     clear: t.clear === true,
     consequential: t.consequential === true,
     reversible: t.reversible === true,
@@ -51,7 +60,7 @@ export function pipeline({
   happened,
   next,
   actionId,
-  allowed = true,
+  allowed = false,
   blastRadius,
   label,
   kind
