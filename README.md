@@ -15,7 +15,7 @@ if system → routeAction
              └─ BLOCK → do not execute
 ```
 
-`policy-kit` exists because two questions that are often collapsed in agent demos are actually different:
+`policy-kit` separates two questions that agent workflows often merge:
 
 1. **Decision right:** is the situation clear enough for the system to make the next decision?
 2. **Execution permission:** even if the decision is clear, is this particular tool action safe to run automatically?
@@ -31,7 +31,7 @@ A payment can be perfectly clear and still require approval. A tool can be disal
 
 ## Failure classes covered
 
-The eval suite is organized around failures that matter in real agentic products, not only happy-path demos:
+The eval suite is organized around failures that matter in agentic products:
 
 - false fit;
 - proof inflation;
@@ -46,7 +46,7 @@ The eval suite is organized around failures that matter in real agentic products
 - idempotency blindness;
 - policy drift.
 
-The repository currently passes **10/10 core scenarios + 16/16 failure-class evals**.
+The repository passes **10/10 core scenarios + 16/16 failure-class evals**.
 
 ```bash
 npm test
@@ -55,7 +55,7 @@ npm run report
 
 `npm run report` writes a machine-readable JSON report and a human-readable `docs/EVAL_REPORT.md`.
 
-## Evidence today
+## Status
 
 | Evidence | Status |
 |---|---|
@@ -66,7 +66,7 @@ npm run report
 | Failure-class evals | **16/16 passing** |
 | Responsive Chromium smoke (320 / 390 / 768 / 1440 px) | **passing in CI** |
 
-The useful proof here is not the number of scenarios by itself. It is that ambiguity, execution risk, provenance loss, review bypass, money, privilege and destructive actions are represented as **explicit testable failure classes rather than prompt instructions**.
+Ambiguity, execution risk, provenance loss, review bypass, money, privilege and destructive actions are represented in code as **explicit, testable failure classes**.
 
 ## Quick start
 
@@ -86,7 +86,7 @@ const result = pipeline({
 // result.outcome: 'execute' | 'human' | 'blocked'
 ```
 
-## Try the demo
+## Run locally
 
 ```bash
 npm run demo
@@ -114,7 +114,7 @@ who decides?    →    may the tool run?
 
 ## Integration scope
 
-Executable policy reference and evaluation harness. Production integrations add authenticated principals, organization-owned policies, durable audit and provider-specific enforcement. Independent adoption and commercial outcomes are not yet measured.
+Executable policy reference and evaluation harness. Production integrations add authenticated principals, organization-owned policies, durable audit and provider-specific enforcement.
 
 ---
 
